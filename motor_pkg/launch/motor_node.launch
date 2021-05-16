@@ -1,0 +1,5 @@
+<launch>
+  <node name="MOTOR_NODE" pkg="rosserial_arduino" type="serial_node.py" respawn="true" output="screen">
+    <param name="port" value="/dev/Motor" />
+  </node>
+</launch>

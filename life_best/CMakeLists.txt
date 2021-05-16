@@ -18,6 +18,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  /usr/include/eigen3 
 )
 
 add_executable(robot_core src/robot_main.cpp)

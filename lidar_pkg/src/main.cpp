@@ -11,7 +11,7 @@ int main(int argc,char **argv){
   ros::Publisher dist_pub = nh.advertise<life_msgs::distance>("/distance", 1);
   life_msgs::distance dist_msg;
 
-	Serial LRR("/dev/ttyUSB1",115200);
+	Serial LRR("/dev/Lidar",115200);
 	if(!LRR.good){
 		cout<<"Sensor ERROR"<<endl;
 		return 0;
