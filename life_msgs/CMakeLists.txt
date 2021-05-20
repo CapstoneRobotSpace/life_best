@@ -14,6 +14,7 @@ add_message_files(
   FILES
   motor.msg
   distance.msg
+  yolo.msg
 )
 
 #add_service_files(

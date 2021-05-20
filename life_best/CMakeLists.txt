@@ -6,12 +6,13 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   std_msgs
+  nav_msgs
 )
 
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES life_best life_msgs
-  CATKIN_DEPENDS roscpp sensor_msgs std_msgs
+  CATKIN_DEPENDS roscpp sensor_msgs std_msgs nav_msgs
   DEPENDS system_lib
 )
 
