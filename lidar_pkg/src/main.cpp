@@ -1,6 +1,7 @@
 #include "serial.cpp"
 #include <iostream>
 #include <cstring>
+#include <string>
 #include "life_msgs/distance.h"
 #include "ros/ros.h"
 
@@ -10,8 +11,10 @@ int main(int argc,char **argv){
 	ros::NodeHandle nh;
   ros::Publisher dist_pub = nh.advertise<life_msgs::distance>("/distance", 1);
   life_msgs::distance dist_msg;
-
-	Serial LRR("/dev/Lidar",115200);
+  string param;
+  if(nh.getParam("/LIDER_NODE/port",param))
+    cout<<"port : "<<param<<endl;
+	Serial LRR(param.c_str(),115200);
 	if(!LRR.good){
 		cout<<"Sensor ERROR"<<endl;
 		return 0;
