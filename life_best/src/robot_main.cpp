@@ -5,6 +5,7 @@
 #include "life_msgs/yolo.h"
 #include "sensor_msgs/Imu.h"
 #include "nav_msgs/Odometry.h"
+#include "std_msgs/Int32.h"
 #include <Eigen/Dense>
 #include <queue>
 #define ROBOT_WEIGHT 5.5
@@ -117,9 +118,17 @@ void CameraFun(const life_msgs::yolo& msg){
 };
 
 void OdomFun(const nav_msgs::Odometry& msg){
-  pos.x = -msg.pose.pose.position.x;
-  pos.y = msg.pose.pose.position.y;
-  pos.z = -msg.pose.pose.position.z;
+  static Position init_pos;
+  static bool start = false;
+  if(!start){
+    init_pos.x = msg.pose.pose.position.x;
+    init_pos.y = msg.pose.pose.position.y;
+    init_pos.z = msg.pose.pose.position.z;
+    start = true;
+  }
+  pos.x = -(msg.pose.pose.position.x - init_pos.x)*100;
+  pos.y = (msg.pose.pose.position.y - init_pos.y)*100;
+  pos.z = -(msg.pose.pose.position.z - init_pos.z)*100;
 };
  
 
@@ -128,18 +137,36 @@ int main(int argc,char** argv){
   ros::init(argc,argv,"ROBOT_CORE");
 	ros::NodeHandle nh;
   ros::Publisher m_pub = nh.advertise<life_msgs::motor>("/motor", 1);
+  ros::Publisher s_pub = nh.advertise<std_msgs::Int32>("/state", 1);
   ros::Subscriber dist_sub = nh.subscribe("/distance", 1 ,DistFun);
   ros::Subscriber imu_sub = nh.subscribe("/imu", 1 ,ImuFun);
   ros::Subscriber cam_sub = nh.subscribe("/cam", 1 ,CameraFun);
   ros::Subscriber odom_sub = nh.subscribe("/odom", 1 ,OdomFun);
   life_msgs::motor m_msg;
-  int state = 0;
+  std_msgs::Int32 state;
+  int step = 0;
   while(ros::ok()){
-    if(state == 0){
-      cout<<force.abs_sum()<<endl;
-      if(abs(unit(2)) > 0.4)
-        cout<<"warn";
+    if(step == 0){
+      cout<<abs(unit(2))<<endl;
+      if(abs(unit(2)) < 0.4){
+        state.data = 2;      
+      }
+      else if(abs(unit(2)) < 0.7){
+        state.data = 1;      
+      }
+      else{
+        state.data = 0;      
+      }
+      if(state.data > 0){
+         if(force.abs_sum() > 500)
+            step = 1;      
+      }
     }
+    else if(step == 1){
+      // motor_go
+      cout<<view_target.transpose()<<endl;
+    }
+    s_pub.publish(state);
     m_pub.publish(m_msg);
     ros::spinOnce();
   }

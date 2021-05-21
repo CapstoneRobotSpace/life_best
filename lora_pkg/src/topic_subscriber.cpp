@@ -29,12 +29,17 @@ void msgCallback2(const std_msgs::Int32::ConstPtr& gps_msg2){
 	
 }
 
+void msgCallback3(const std_msgs::Int32::ConstPtr& msg){
+  state = msg->data;	
+}
+
 int main(int argc,char **argv){
     using namespace std; 
 	ros::init(argc, argv, "LORA_NODE");
 	ros::NodeHandle nh; 
-	ros::Subscriber ros_tutorial_sub2= nh.subscribe("/gps2",1,msgCallback2);
-	ros::Subscriber ros_tutorial_sub= nh.subscribe("/gps",1,msgCallback);
+	ros::Subscriber sub2= nh.subscribe("/gps2",1,msgCallback2);
+	ros::Subscriber sub= nh.subscribe("/gps",1,msgCallback);
+  ros::Subscriber sub3= nh.subscribe("/state",1,msgCallback3);
   string param;
   if(nh.getParam("/LORA_NODE/port",param))
     cout<<"port : "<<param<<endl;

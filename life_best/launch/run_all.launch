@@ -1,19 +1,21 @@
 <launch>
   <node name="CORE_NODE" pkg="life_best" type="robot_core" respawn="true" output="screen">
   </node>
-  <node name="MOTOR_NODE" pkg="rosserial_arduino" type="serial_node.py" respawn="true">
+  <node name="GPS_TO_ODOM" pkg="gps_common" type="utm_odometry_node" respawn="true" >
+  </node>
+  <node name="MOTOR_NODE" pkg="rosserial_arduino" type="serial_node.py" respawn="true" >
     <param name="port" value="/dev/ttyUSB0" />
   </node>
   <node name="LIDER_NODE" pkg="lidar_pkg" type="lidar_node" respawn="true">
     <param name="port" value="/dev/ttyUSB1" />
   </node>
-  <node name="GPS_NODE" pkg="gps_pkg" type="gps_node" respawn="true">
+  <node name="GPS_NODE" pkg="gps_pkg" type="gps_node" respawn="true" >
     <param name="port" value="/dev/ttyUSB2" />
   </node>
   <node name="LORA_NODE" pkg="lora_pkg" type="lora_node" respawn="true">
     <param name="port" value="/dev/ttyUSB3" />
   </node>
-  <node name="IMU_NODE" pkg="imu_pkg" type="imu_node" respawn="true">
+  <node name="IMU_NODE" pkg="imu_pkg" type="imu_node" respawn="true" >
     <param name="port" value="/dev/ttyACM0" />
   </node>
 </launch>
