@@ -22,7 +22,7 @@ int main(int argc,char **argv){
 	char buf[9] {};
 	int buf_index = 0;
 	memset(buf,'\0',9);
-  ROS_INFO("START NODE...");
+	ROS_INFO("START NODE...");
 	while(ros::ok()){
 		if(buf_index < 2){
 			LRR.sread(buf+buf_index,1);
@@ -43,7 +43,7 @@ int main(int argc,char **argv){
 					temp += buf[2];
 					if(temp < 180000)
 						dist_msg.dist = temp;
-	        dist_pub.publish(dist_msg);
+		dist_pub.publish(dist_msg);
 				}
 				buf_index = 0;
 			}
